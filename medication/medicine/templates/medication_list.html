@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <a href="{% url 'medication_add' %}">
+    <button>Přidat nový lék</button>
+  </a>
+
+  <h1>Seznam léků</h1>
+
+  {% if medications %}
+    <ul>
+      {% for medication in medications %}
+        <li>
+
+          <h2>{{ medication.name }}</h2>
+
+          <p><strong>Poznámka:</strong> {{ medication.notes }}</p>
+          <p><strong>Počet zbývajících dávek:</strong> {{ medication.remaining_quantity }}</p>
+          <p><strong>Dávkování:</strong> {{ medication.dosage }} x</p>
+
+          <!-- Zobrazení plánů užívání pro daný lék -->
+          <h3>Den užívání:</h3>
+          {% if medication.schedule_set.exists %}
+            <ul>
+              {% for schedule in medication.schedule_set.all %}
+                <li>{{ schedule.get_day_of_week_display }} v {{ schedule.time|date:"H:i" }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>Plán užívání není nastaven.</p>
+          {% endif %}
+
+          <!-- Zobrazení posledního užití -->
+          <h3>Poslední užití:</h3>
+          {% if medication.last_taken %}
+            <p>{{ medication.last_taken|date:"d.m.Y H:i" }}</p>
+          {% else %}
+            <p><em>Dosud nebyl užit</em></p>
+          {% endif %}
+
+          <!-- Tlačítka pro interakci s lékem -->
+          <form method="POST" action="{% url 'mark_as_taken' medication.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Označit jako použitý</button>
+          </form>
+
+          <form method="POST" action="{% url 'add_dose' medication.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" name="action" value="increase">Přidat dávku</button>
+            {% if medication.remaining_quantity > 0 %}
+              <button type="submit" name="action" value="decrease">Odebrat dávku</button>
+            {% else %}
+              <button type="button" disabled>Odebrat dávku</button>
+            {% endif %}
+          </form>
+
+          <form method="POST" action="{% url 'medication_delete' medication.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" onclick="return confirm('Opravdu chcete tento lék smazat?');">Smazat lék</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nemáte žádné léky.</p>
+  {% endif %}
+{% endblock %}

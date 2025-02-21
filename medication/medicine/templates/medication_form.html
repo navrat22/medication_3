@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% if object %}Upravit{% else %}Přidat{% endif %} lék</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <label for="id_day_of_week">Den v týdnu (volitelné):</label>
+    {{ schedule_form.day_of_week }}
+    <select name="day_of_week" id="id_day_of_week">
+        <option value="">-- Vyberte den --</option>
+        <option value="Monday">Pondělí</option>
+        <option value="Tuesday">Úterý</option>
+        <option value="Wednesday">Středa</option>
+        <option value="Thursday">Čtvrtek</option>
+        <option value="Friday">Pátek</option>
+        <option value="Saturday">Sobota</option>
+        <option value="Sunday">Neděle</option>
+    </select>
+
+    <label for="id_time">Čas užívání (volitelné):</label>
+    {{ schedule_form.time }}
+    <input type="time" name="time" id="id_time">
+
+    <button type="submit">{% if object %}Upravit{% else %}Přidat{% endif %} lék</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Statistiky užívání léků</h2>
+
+    {% if stats %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Lék</th>
+                    <th>Celkový počet užitých dávek</th>
+                    <th>Průměrný počet dávek denně</th>
+                    <th>Poslední aktualizace</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in stats %}
+                    <tr>
+                        <td>{{ stat.medication.name }}</td>
+                        <td>{{ stat.total_doses_taken }}</td>
+                        <td>{{ stat.average_doses_per_day }}</td>
+                        <td>{{ stat.last_update }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Žádné statistiky k dispozici.</p>
+    {% endif %}
+{% endblock %}

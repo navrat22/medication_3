@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Oprávnění ke smazání</h2>
+  <p>Opravdu chcete smazat tento lék: <strong>{{ medication.name }}</strong>?</p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit">Ano, smazat</button>
+    <a href="{% url 'medication_list' %}"><button type="button">Zrušit</button></a>
+  </form>
+{% endblock %}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mé léky{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'medication_list' %}">Seznam léků</a></li>
+                <li><a href="{% url 'medication_add' %}">Přidat nový lék</a></li>
+                <li>
+                    <!-- Formulář pro odhlášení -->
+                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                    <a href="#" onclick="document.getElementById('logout-form').submit();">Odhlásit</a>
+                </li>
+                <li><a href="/statistics/">Statistiky</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Moje léky</p>
+    </footer>
+</body>
+</html>

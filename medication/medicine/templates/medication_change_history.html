@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Historie změn pro {{ medication.name }}</h1>
+
+  {% if changes %}
+    <ul>
+      {% for change in changes %}
+        <li>
+          <strong>{{ change.change_date|date:"d.m.Y H:i" }}</strong><br>
+          Uživatel: {{ change.user.username }}<br>
+          Změněné pole: {{ change.field_changed }}<br>
+          Původní hodnota: {{ change.old_value }}<br>
+          Nová hodnota: {{ change.new_value }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Žádné změny nebyly zaznamenány.</p>
+  {% endif %}
+{% endblock %}
